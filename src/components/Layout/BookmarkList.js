@@ -1,19 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { BookmarksContext } from '../Bookmrk_context/BookmarksContext';
 import BookmarkItem from './BookmarkItem';
-import './BookmarkList.css';
 
-const BookmarkList = ({ bookmarks, onEdit, onDelete }) => {
+const BookmarkList = () => {
+  const { bookmarks } = useContext(BookmarksContext);
+
   return (
-    <div className="bookmarks-list">
+    <ul>
       {bookmarks.map((bookmark) => (
-        <BookmarkItem
-          key={bookmark._id}
-          bookmark={bookmark}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
+        <BookmarkItem key={bookmark._id} bookmark={bookmark} />
       ))}
-    </div>
+    </ul>
   );
 };
 

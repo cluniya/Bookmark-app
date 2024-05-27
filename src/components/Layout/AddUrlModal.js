@@ -1,55 +1,26 @@
-import React, { useState } from 'react';
-// import { useModal } from './ModalContext';
-import { useModal } from '../Bookmrk_context/ModalContext';
-import axios from 'axios';
+import React, { useContext } from 'react';
+import ReactDOM from 'react-dom';
 import './AddUrlModal.css';
+import { BookmarksContext } from '../Bookmrk_context/BookmarksContext';
 
-const API_ENDPOINT = 'https://crudcrud.com/api/5a27aafc745f4114b77bbaa0e65802c2/bookmarks';
+const AddUrlModal = ({ isOpen, onClose, children }) => {
+  const { resetForm } = useContext(BookmarksContext);
 
-const AddUrlModal = (props) => {
-  const { isOpen, closeModal } = useModal();
-  const [urlName, setUrlName] = useState('');
-  const [urlAddress, setUrlAddress] = useState('');
-
-  const handleUrlNameChange = (event) => {
-    setUrlName(event.target.value);
+  const handleFunClose = () => {
+    onClose();
+    resetForm();
   };
 
-  const handleUrlAddressChange = (event) => {
-    setUrlAddress(event.target.value);
-  };
+  if (!isOpen) return null;
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await axios.post(API_ENDPOINT, { urlName, urlAddress });
-      closeModal();
-      setUrlName('');
-      setUrlAddress('');
-    } catch (error) {
-      console.error('Error adding the URL:', error);
-    }
-  };
-
-//   if (!isOpen) return null;
-
-  return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <button className="close-button" onClick={props.closeModal}>Close</button>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="urlName">URL Name:</label>
-            <input type="text" id="urlName" value={urlName} onChange={handleUrlNameChange} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="urlAddress">URL Address:</label>
-            <input type="url" id="urlAddress" value={urlAddress} onChange={handleUrlAddressChange} required />
-          </div>
-          <button type="submit">Add URL</button>
-        </form>
+  return ReactDOM.createPortal(
+    <div className="modal-overlay" onClick={handleFunClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <button className="close-button" onClick={handleFunClose}>Close</button>
+        {children}
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal-root')
   );
 };
 

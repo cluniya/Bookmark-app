@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './BookmarkItem.css';
+import { BookmarksContext } from '../Bookmrk_context/BookmarksContext';
 
-const BookmarkItem = ({ bookmark, onEdit, onDelete }) => {
+const BookmarkItem = ({ bookmark }) => {
+  const { handleEdit, handleDelete } = useContext(BookmarksContext);
+
   return (
     <div className="bookmark-item">
       <div className="bookmark-info">
@@ -11,8 +14,8 @@ const BookmarkItem = ({ bookmark, onEdit, onDelete }) => {
         </a>
       </div>
       <div className="bookmark-actions">
-        <button onClick={() => onEdit(bookmark)} className="edit-button">Edit</button>
-        <button onClick={() => onDelete(bookmark._id)} className="delete-button">Delete</button>
+        <button onClick={() => handleEdit(bookmark)} className="edit-button">Edit</button>
+        <button onClick={() => handleDelete(bookmark._id)} className="delete-button">Delete</button>
       </div>
     </div>
   );
